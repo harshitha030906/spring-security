@@ -3,15 +3,19 @@ package com.harshitha.springsecurity.springsecurity.service;
 
 import com.harshitha.springsecurity.springsecurity.dto.PostDTO;
 import com.harshitha.springsecurity.springsecurity.entities.PostEntity;
+import com.harshitha.springsecurity.springsecurity.entities.User;
 import com.harshitha.springsecurity.springsecurity.exceptions.ResourceNotFoundException;
 import com.harshitha.springsecurity.springsecurity.repository.PostRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PostServiceimpl implements PostService {
 
@@ -40,7 +44,12 @@ public class PostServiceimpl implements PostService {
 
     @Override
     public PostDTO getPostById(@RequestParam Long id) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("User {}", user);
+
         PostEntity postEntity = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The post with Id is not found"));
+
         return modelMapper.map(postEntity, PostDTO.class);
     }
 

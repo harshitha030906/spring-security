@@ -1,6 +1,7 @@
 package com.harshitha.springsecurity.springsecurity.advice;
 
 import com.harshitha.springsecurity.springsecurity.exceptions.ResourceNotFoundException;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,5 +21,11 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException exception) {
+        ApiError apiError = new ApiError(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+
     }
 }

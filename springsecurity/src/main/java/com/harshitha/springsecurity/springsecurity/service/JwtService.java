@@ -28,7 +28,7 @@ public class JwtService {
                 .claim("email", "harshitha3368@gmail.com")
                 .claim("roles", List.of("ADMIN", "USER"))
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 600000))
+                .expiration(new Date(System.currentTimeMillis() + 6000000))
                 .signWith(getHashkey())
                 .compact();
     }
