@@ -6,6 +6,9 @@ import com.harshitha.springsecurity.springsecurity.dto.UserDTO;
 import com.harshitha.springsecurity.springsecurity.entities.User;
 import com.harshitha.springsecurity.springsecurity.service.AuthService;
 import com.harshitha.springsecurity.springsecurity.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,8 +32,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response){
         String token = authService.login(loginDTO);
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
         return ResponseEntity.ok(token);
     }
 }
